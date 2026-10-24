@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Mikumi 3D Omega Floating Companion</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: transparent !important;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+    }
+    #overlayStage {
+      width: 100%;
+      height: 100%;
+      background: transparent !important;
+    }
+    #floatingSpeech {
+      position: fixed;
+      top: 2px;
+      left: 4px;
+      right: 4px;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(17, 18, 21, 0.2);
+      border-radius: 12px;
+      padding: 5px 8px;
+      font-size: 10.5px;
+      line-height: 1.35;
+      font-weight: 600;
+      color: #111215;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+      opacity: 0;
+      transition: opacity 0.22s ease;
+      pointer-events: none;
+    }
+    #floatingSpeech.visible { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div id="floatingSpeech">Mikumi 3D Omega ♡</div>
+  <div id="overlayStage"></div>
+
+  <script src="./engine3d.bundle.js"></script>
+  <script src="./stage3d.js"></script>
+  <script>
+    (async function () {
+      const container = document.getElementById("overlayStage");
+      const speechEl = document.getElementById("floatingSpeech");
+      let hideTimer = null;
+
+      function showBubble(txt) {
+        if (!txt) return;
+        speechEl.textContent = txt.replace(/\*\*/g, "").slice(0, 105);
+        speechEl.classList.add("visible");
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => speechEl.classList.remove("visible"), 4800);
+      }
+
+      await window.MikumiStage3D.init(container, {
+        isOverlay: true,
+        fpsLimit: 30,
+        vrmModel: "mikumi_vita.vrm",
+        shaderTheme: "nothing_white",
+        petId: "pet_droid",
+        showPet: true,
+        onTouchReaction: (part) => {
+          if (part === "head") {
+            const msg = "Ehehe~ 3D headpat ekata sthuthiyi! ♡";
+            showBubble(msg);
+            if (window.OverlayNative && window.OverlayNative.speakText) window.OverlayNative.speakText(msg);
+          } else if (part === "pet") {
+            showBubble("3D Pet loves floating over your apps! 🐾");
+          } else {
+            showBubble("Haha! Oya mata kithi kawenawada? 😆");
+          }
+        }
+      });
+
+      window.applyOverlayUpdate = async function (cfg) {
+        if (!cfg) return;
+        if (cfg.fps) window.MikumiStage3D.setFpsLimit(cfg.fps);
+        if (cfg.vrmModel || cfg.theme) {
+          await window.MikumiStage3D.loadMikumiVRM(cfg.vrmModel || "mikumi_vita.vrm", cfg.theme || "nothing_white");
+        }
+        if (cfg.pet) {
+          await window.MikumiStage3D.loadPet3D(cfg.pet, cfg.showPet !== false);
+        }
+        if (typeof cfg.showPet === "boolean") {
+          window.MikumiStage3D.setPetVisible(cfg.showPet);
+        }
+        if (cfg.action) {
+          window.MikumiStage3D.playAnimation(cfg.action, 4.0);
+        }
+        if (cfg.say) {
+          showBubble(cfg.say);
+          window.MikumiStage3D.setSpeaking(true);
+          setTimeout(() => window.MikumiStage3D.setSpeaking(false), 3200);
+        }
+      };
+    })();
+  </script>
+</body>
+</html>

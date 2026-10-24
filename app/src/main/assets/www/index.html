@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Mikumi 3D Omega v5.3 • Cozy AI Companion Bridge</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- NOTHING OS TOP BAR -->
+    <header class="top-bar">
+      <div class="brand-cluster">
+        <div class="glyph-dot"></div>
+        <div>
+          <div class="brand-title ndot">MIKUMI 3D v5.3</div>
+          <div class="brand-sub">COZY AI COMPANION • STUDIO MOCAP</div>
+        </div>
+      </div>
+      <div class="top-right-controls">
+        <button id="voiceQuickBtn" class="voice-quick-btn" title="Switch Voice ON vs Silent Text Messages">🔊 Voice ON</button>
+        <div id="slClock" class="sl-clock-pill">--:-- LK</div>
+        <button id="masterPowerBtn" class="master-power-btn">● ON</button>
+      </div>
+    </header>
+
+    <!-- LIVE TELEMETRY + RELATIONSHIP STAGE STRIP -->
+    <div class="telemetry-strip">
+      <span id="fpsChip" class="chip red-accent">⚡ 60 FPS • MOCAP 3D</span>
+      <span id="topBondBadge" class="chip">🌸 3. Cute Friend (32%)</span>
+      <span id="activeAgentChip" class="chip">✦ Mikumi Lead</span>
+      <span id="petNameBadge" class="chip">🐾 Mochi</span>
+      <span id="ramChip" class="chip">RAM 7.4G free</span>
+      <span id="tempChip" class="chip">🔋 92% • 31.6°C</span>
+    </div>
+
+    <!-- SILENT TEXT NOTIFICATION TOAST (Appears automatically when Voice is OFF!) -->
+    <div id="silentMsgToast" class="silent-msg-toast"></div>
+
+    <!-- MAIN VIEWS -->
+    <main class="views-container">
+
+      <!-- TAB 1: STUDIO 3D MOCAP STAGE & 5 KAWAII WAIFUS -->
+      <section id="view-stage" class="view-panel active">
+        <div id="stageCard" class="stage-card" style="height: 435px;">
+          <button id="btnRestoreHud" class="unhide-hud-btn">👁️ SHOW HUD</button>
+
+          <div class="stage-top-hud">
+            <div class="cam-pills">
+              <button class="cam-btn active" data-cam="full">FULL</button>
+              <button class="cam-btn" data-cam="bust">CLOSE</button>
+              <button class="cam-btn" data-cam="face">FACE</button>
+              <button class="cam-btn" data-cam="side">SIDE</button>
+              <button class="cam-btn" data-cam="pet">PET</button>
+              <button id="btnCleanHud" class="cam-btn" title="Pure Fullscreen 3D">⛶</button>
+            </div>
+            <button id="launchOverlayBtn" class="overlay-launch-btn">↗ FLOAT 3D</button>
+          </div>
+
+          <div id="speechBubble" class="speech-bubble">
+            ආයුබෝවන්! ✨ Switch my 5 cute Studio 3D Outfits, trigger real Mocap Dances &amp; Poses, snap 3D Polaroids, or check Soul &amp; Date! ♡
+          </div>
+
+          <div id="viewport3d"></div>
+
+          <div class="stage-bottom-hint">
+            <span class="hint-tag">↻ 360° ORBIT • PINCH ZOOM</span>
+            <span class="hint-tag">👆 HEADPAT MIKUMI OR PET</span>
+          </div>
+
+          <div id="loading3DBadge" class="loading-3d-badge">
+            <span id="loading3DText">● LOADING STUDIO 3D WAIFU + MOCAP...</span>
+          </div>
+
+          <div class="dormant-banner">
+            <div class="ndot" style="font-size: 15px;">💤 ENGINE OFF • 0% BATTERY DRAIN</div>
+            <p style="font-size: 12.5px; color: #5a5d66;">
+              WebGL 3D GPU loop, floating windows, voice synthesis &amp; screen reader are 100% stopped.
+            </p>
+            <button id="wakeEngineBtn" class="btn btn-dark">⚡ WAKE MIKUMI 3D v5.0</button>
+          </div>
+        </div>
+
+        <!-- 5 ULTRA-PRETTY STUDIO 3D WAIFU WARDROBE SWITCHER -->
+        <div class="card" style="padding: 12px;">
+          <div class="card-header" style="margin-bottom: 8px;">
+            <span class="card-title ndot">👗 5 KAWAII STUDIO 3D WAIFU MODELS</span>
+            <span class="chip red-accent">HIGH-POLY MTOON</span>
+          </div>
+          <div class="grid-5">
+            <div class="selector-tile" data-vrm="mikumi_vita.vrm" data-theme="nothing_white" data-label="Cyber Neko Idol (Vita)">
+              <span>🩵</span><span>Cyber Idol</span>
+            </div>
+            <div class="selector-tile" data-vrm="mikumi_victoria.vrm" data-theme="sakura_pink" data-label="Sakura Princess Gown">
+              <span>🌸</span><span>Princess</span>
+            </div>
+            <div class="selector-tile" data-vrm="mikumi_streetwear.vrm" data-theme="pastel_kawaii" data-label="Harajuku Ribbon Jacket">
+              <span>🎀</span><span>Harajuku</span>
+            </div>
+            <div class="selector-tile" data-vrm="mikumi_academy.vrm" data-theme="school_morning" data-label="Sapphire JK Uniform">
+              <span>🎓</span><span>JK School</span>
+            </div>
+            <div class="selector-tile" data-vrm="mikumi_nothing.vrm" data-theme="nothing_white" data-label="Nothing White Valkyrie">
+              <span>🤍</span><span>Valkyrie</span>
+            </div>
+          </div>
+
+          <!-- 4 DYNAMIC 3D ROOM LIGHTING STAGES + 3D PHOTO SNAP SHORTCUT -->
+          <div class="motion-strip" style="margin-top: 9px;">
+            <button class="btn stage-env-btn btn-dark" data-stageenv="studio_white">☀️ White Studio</button>
+            <button class="btn stage-env-btn" data-stageenv="sunset_sakura">🌸 Sakura Sunset</button>
+            <button class="btn stage-env-btn" data-stageenv="night_sanctuary">🌙 Night Sanctuary</button>
+            <button class="btn stage-env-btn" data-stageenv="neon_concert">🎆 Neon Concert</button>
+            <button class="btn stage-env-btn" data-stageenv="cozy_bedroom">🛏️ Cozy Bedroom</button>
+            <button id="avatarMoveModeBtn" class="btn">🖐️ Move Mikumi</button>
+            <button id="quickPhotoBoothBtn" class="btn btn-red">📸 Photo Studio</button>
+          </div>
+        </div>
+
+        <!-- STUDIO .VRMA MOTION-CAPTURE EMOTES, DANCES & 3D VALKYRIE GEAR -->
+        <div class="card" style="padding: 11px 12px;">
+          <div class="card-header" style="margin-bottom: 7px;">
+            <span class="card-title ndot">💃 STUDIO .VRMA MOCAP &amp; 3D GEAR</span>
+            <span class="chip red-accent">REAL MOTION CAPTURE</span>
+          </div>
+          <div class="motion-strip" style="margin-bottom: 7px;">
+            <button class="btn btn-red" data-anim3d="duo_combo">❤️‍🔥 Duo Dance!</button>
+            <button class="btn btn-dark" data-anim3d="dance">💃 Idol Dance</button>
+            <button class="btn" data-anim3d="peace">✌️ Peace Sign</button>
+            <button class="btn" data-anim3d="shoot">👉 Heart Shoot</button>
+            <button class="btn" data-anim3d="pose">📸 Model Pose</button>
+            <button class="btn" data-anim3d="spin">🌀 360° Twirl</button>
+            <button class="btn" data-anim3d="wave">👋 Polite Greet</button>
+            <button class="btn" data-anim3d="headpat">🥰 Headpat</button>
+          </div>
+          <div class="motion-strip" style="margin-bottom: 7px;">
+            <button class="btn btn-dark" data-greet="Good morning">☀️ Good Morning</button>
+            <button class="btn" data-greet="Good afternoon">🌤️ Good Afternoon</button>
+            <button class="btn" data-greet="Good evening">🌆 Good Evening</button>
+            <button class="btn btn-red" data-greet="Good night">🌙 Good Night</button>
+          </div>
+          <div class="motion-strip">
+            <button class="btn btn-dark acc-toggle-btn" data-acc="wings">🪽 3D Wings: ON</button>
+            <button class="btn acc-toggle-btn" data-acc="headset">🎧 3D Headset: OFF</button>
+            <button class="btn btn-dark acc-toggle-btn" data-acc="halo">😇 3D Halo: ON</button>
+            <button class="btn btn-dark acc-toggle-btn" data-acc="orb">🔮 AI Orb: ON</button>
+          </div>
+
+          <div class="grid-2" style="margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border-subtle);">
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+                <span>3D Avatar Scale</span><strong id="scaleValLabel">100%</strong>
+              </div>
+              <input id="scaleSlider" type="range" min="75" max="135" value="100" />
+            </div>
+            <div>
+              <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+                <span>Hair/Skirt Physics</span><strong id="springValLabel">1.0x</strong>
+              </div>
+              <input id="springSlider" type="range" min="30" max="180" value="100" />
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top: 9px;">
+            <div>
+              <div style="font-size: 11px; font-weight: 700; margin-bottom: 4px;">📥 Custom `.vrm` Model:</div>
+              <input id="customVrmInput" type="file" accept=".vrm,.glb,.gltf" style="font-size: 11px; padding: 6px;" />
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 700; margin-bottom: 4px;">🎞️ Custom `.vrma` Mocap:</div>
+              <input id="customVrmaInput" type="file" accept=".vrma,.glb" style="font-size: 11px; padding: 6px;" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: SOUL, 8-STAGE DATING SIM, GIFT SHOP, DIARY & D20 QUEST (Utsuwa + YuriOS + Soul-of-Waifu!) -->
+      <section id="view-soul" class="view-panel">
+        <!-- UTSUWA 8-STAGE RELATIONSHIP + AFFECTION / TRUST / COMFORT / ENERGY -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">💖 8-STAGE DATING BOND &amp; GIFT SHOP</span>
+            <span class="chip red-accent">UTSUWA ENGINE</span>
+          </div>
+          <div class="stage-badge-banner">
+            <div>
+              <div style="font-size:10px; color:var(--ink-secondary); font-weight:700;">CURRENT RELATIONSHIP STAGE</div>
+              <div id="relStageLabel" style="font-size:14.5px; font-weight:800; color:var(--nothing-red);">🌸 3. Cute Friend</div>
+            </div>
+            <div id="relInteractionsChip" class="chip">3 Moments</div>
+          </div>
+
+          <div class="stat-bars">
+            <div class="stat-item">
+              <div class="stat-top"><span>💖 Affection</span><span id="statAffVal">32%</span></div>
+              <div class="stat-track"><div id="statAffBar" class="stat-fill pink" style="width:32%;"></div></div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-top"><span>🤝 Trust</span><span id="statTrustVal">26%</span></div>
+              <div class="stat-track"><div id="statTrustBar" class="stat-fill cyan" style="width:26%;"></div></div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-top"><span>🌸 Comfort</span><span id="statComfortVal">28%</span></div>
+              <div class="stat-track"><div id="statComfortBar" class="stat-fill amber" style="width:28%;"></div></div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-top"><span>✨ Mood Energy</span><span id="statEnergyVal">92%</span></div>
+              <div class="stat-track"><div id="statEnergyBar" class="stat-fill" style="width:92%;"></div></div>
+            </div>
+          </div>
+
+          <div style="margin-top: 11px; font-size: 11.5px; font-weight: 700;">🎁 Give Mikumi a Sweet Gift (Boosts Bond + Mocap Reaction!):</div>
+          <div class="action-row">
+            <button class="btn" data-gift="boba">🍓 Boba Tea (+8)</button>
+            <button class="btn" data-gift="cake">🍰 Matcha Cake (+9)</button>
+            <button class="btn" data-gift="earbuds">🎧 Nothing Buds (+12)</button>
+            <button class="btn" data-gift="sakura">🌸 Sakura Pin (+13)</button>
+            <button class="btn btn-red" data-gift="crystal">💎 Starlight Gem (+22)</button>
+          </div>
+          <div id="giftReactionBox" style="margin-top:9px; font-size:12px; color:var(--ink-secondary); line-height:1.45;">
+            Give a gift to see Mikumi's blushing reaction &amp; advance toward <strong>8. Eternal Soulmate 💖</strong>!
+          </div>
+        </div>
+
+        <!-- YURIOS FIRST-PERSON SECRET DIARY -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">📔 MIKUMI'S SECRET DIARY</span>
+            <button id="writeDiaryBtn" class="btn btn-dark" style="padding:5px 10px; font-size:10.5px;">✍️ Write Today's Entry</button>
+          </div>
+          <div id="diaryEntriesBox"></div>
+        </div>
+
+        <!-- SOUL-OF-WAIFU INTERACTIVE D20 VISUAL NOVEL / RPG ENGINE -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">🎲 SOUL-OF-WAIFU D20 STORY ENGINE</span>
+            <span class="chip red-accent">TABLETOP + VN</span>
+          </div>
+          <select id="questArcSelect" style="margin-bottom: 8px; font-size: 12px;">
+            <option value="🏯 Cyber Colombo 2088: Neon Glyph Mystery">🏯 Cyber Colombo 2088: Neon Glyph Mystery</option>
+            <option value="🌸 Sakura Academy Rooftop Festival">🌸 Sakura Academy Rooftop Festival</option>
+            <option value="🗡️ Starlight Crystal Citadel Quest">🗡️ Starlight Crystal Citadel Quest</option>
+          </select>
+          <div class="d20-hud">
+            <span id="questDieBadge" class="d20-die-badge">🎲 D20: 18</span>
+            <span id="questHpSpan">❤️ HP 100</span>
+            <span id="questMpSpan">🔮 MP 80</span>
+            <span id="questXpSpan">✨ Bond XP 45</span>
+          </div>
+          <div id="questSceneBox" style="background:var(--bg-soft); border-radius:13px; padding:10px 12px; font-size:12.3px; line-height:1.5; margin-bottom:8px;"></div>
+          <div style="display:flex; gap:6px;">
+            <input id="questActionInput" type="text" placeholder="Your move (e.g. Hack the Glyph hologram with Mikumi)..." />
+            <button id="rollD20Btn" class="btn btn-red">🎲 ROLL D20</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: 3D PHOTO BOOTH STUDIO + CAMERA VISION SCRAPBOOK (Utsuwa + z-waif!) -->
+      <section id="view-studio" class="view-panel">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">📸 3D WAIFU PHOTO BOOTH STUDIO</span>
+            <span class="chip red-accent">POLAROID + PNG</span>
+          </div>
+          <p style="font-size: 12px; color: var(--ink-secondary); margin-bottom: 9px;">
+            Strike a studio pose, freeze mid-motion if you like, and capture high-resolution Polaroid keepsakes or transparent PNG cutouts straight to your phone!
+          </p>
+          <div class="motion-strip" style="margin-bottom: 8px;">
+            <button class="btn" data-photopose="peace">✌️ Peace</button>
+            <button class="btn" data-photopose="shoot">👉 Heart Shoot</button>
+            <button class="btn" data-photopose="pose">📸 Model Pose</button>
+            <button class="btn" data-photopose="dance">💃 Dance</button>
+            <button class="btn" data-photopose="spin">🌀 Twirl</button>
+            <button id="freezePoseBtn" class="btn">❄️ Freeze: OFF</button>
+          </div>
+          <input id="photoCaptionInput" type="text" placeholder="Optional Polaroid caption (e.g. Me & Mikumi ♡)..." style="margin-bottom: 8px;" />
+          <div class="action-row" style="margin-top:0;">
+            <button id="snapPolaroidBtn" class="btn btn-red">📸 Snap Polaroid Card</button>
+            <button id="snapTransparentBtn" class="btn btn-dark">✨ Transparent PNG Cutout</button>
+          </div>
+          <div id="photoGalleryGrid" class="photo-gallery-grid"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">👁️ CAMERA / PHOTO VISION &amp; SCRAPBOOK</span>
+            <span class="chip">Z-WAIF VISION</span>
+          </div>
+          <p style="font-size: 12px; color: var(--ink-secondary); margin-bottom: 8px;">
+            Show Mikumi any photo from your Camera or Gallery (homework problem, outfit, food, meme, pet!) and she will see &amp; explain it in Sinhala or English!
+          </p>
+          <input id="visionQuestionInput" type="text" placeholder="Optional question about photo (e.g. Solve this / How does this look?)..." style="margin-bottom:7px;" />
+          <input id="visionFileInput" type="file" accept="image/*" capture="environment" style="font-size:11.5px; padding:7px;" />
+          <div id="visionResultBox" style="margin-top:9px; font-size:12.5px; line-height:1.48; color:var(--ink-primary);"></div>
+        </div>
+      </section>
+
+      <!-- TAB 4: REELS & LIVE SCREEN COMPANION AI -->
+      <section id="view-reels" class="view-panel">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">📱 LIVE REELS &amp; SCREEN COMPANION</span>
+            <span class="chip red-accent">VOICE ON vs TEXT OFF</span>
+          </div>
+          <p style="font-size: 12px; color: var(--ink-secondary); margin-bottom: 10px;">
+            Mikumi continuously reads whatever Reel / Short / Post is on your screen and reacts! Switch <strong>🔊 Voice ON</strong> vs <strong>🔇 Text Only</strong> anytime:
+          </p>
+
+          <div class="reel-player-mock">
+            <span id="reelBadge" class="reel-badge">INSTAGRAM REELS • COMEDY</span>
+            <div style="margin: 14px 0;">
+              <h3 id="reelTitle" style="font-size: 16px; line-height: 1.35; margin-bottom: 6px;"></h3>
+              <p id="reelCaption" style="font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.45;"></p>
+            </div>
+            <div class="action-row" style="margin-top: 0;">
+              <button id="nextReelBtn" class="btn btn-red">⏭️ Swipe Next Reel (Auto-React!)</button>
+              <button id="reactCurrentReelBtn" class="btn">👁️ Ask Mikumi About This Reel</button>
+            </div>
+          </div>
+
+          <div id="reelMikumiReactionBox" style="margin-top: 10px; padding: 12px; background: var(--bg-soft); border-radius: 14px; font-size: 12.5px; line-height: 1.48;">
+            👆 Tap <strong>Swipe Next Reel</strong> — Mikumi reacts via real Sinhala girl voice (or silent floating text when Voice is OFF)!
+          </div>
+
+          <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-subtle);">
+            <div style="font-size: 11.5px; font-weight: 700; margin-bottom: 6px;">Paste any Reel caption / Foreign quote / Post to test live reaction:</div>
+            <div style="display:flex; gap:6px;">
+              <input id="customReelInput" type="text" placeholder="Paste any Reel / Post text here..." />
+              <button id="customReelTestBtn" class="btn btn-dark">React</button>
+            </div>
+            <button id="readLiveAndroidScreenBtn" class="btn" style="width:100%; justify-content:center; margin-top:8px;">
+              📲 Snapshot Live Android Screen Right Now (APK)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: FRONTIER AI BRAIN + PERSONALITY + HANDS-FREE VTUBER CALL + PHOTO VISION -->
+      <section id="view-chat" class="view-panel">
+        <div class="card" style="padding: 11px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:8px;">
+            <select id="personalitySelect" style="width:auto; flex:1; min-width:155px; padding:5px 8px; font-size:11px; font-weight:700;">
+              <option value="sweet_girl">💖 Sweet Caring Girl</option>
+              <option value="neuro_witty">😈 Neuro-Sama Witty Tease</option>
+              <option value="shy_tsundere">🎀 Shy Tsundere Idol</option>
+              <option value="study_senpai">📚 Study Senpai Tutor</option>
+              <option value="gamer_girl">🔥 120Hz Gamer Girl</option>
+            </select>
+            <select id="voiceLangSelect" style="width:auto; padding:5px 8px; font-size:11px;">
+              <option value="si-LK">🎤 සිංහල</option>
+              <option value="en-US">🎤 English</option>
+            </select>
+            <button id="handsFreeCallBtn" class="btn" style="padding:5px 9px; font-size:10.5px;">📞 Call OFF</button>
+          </div>
+
+          <!-- SOUL-OF-WAIFU SAFE HUMAN-IN-THE-LOOP ACTION APPROVAL BANNER -->
+          <div id="actionApprovalBanner" class="approval-banner">
+            <div id="approvalBannerText" style="font-size:12px; font-weight:700; color:#78350f;"></div>
+            <div style="display:flex; gap:7px;">
+              <button id="approveActionBtn" class="btn btn-dark" style="padding:5px 11px; font-size:11px;">✅ Approve &amp; Run</button>
+              <button id="rejectActionBtn" class="btn" style="padding:5px 11px; font-size:11px;">✕ Cancel</button>
+            </div>
+          </div>
+
+          <div id="chatStream" class="chat-stream"></div>
+
+          <div class="chat-input-bar">
+            <button class="btn mic-trigger mic-btn" title="Speak Command (Interrupts Barge-In Instantly!)">🎤</button>
+            <label for="chatVisionInput" class="btn" style="cursor:pointer; margin:0;" title="Send Photo to Mikumi Vision">📷</label>
+            <input id="chatVisionInput" type="file" accept="image/*" style="display:none;" />
+            <input id="chatInput" type="text" placeholder="Ask anything, make a promise, or command phone..." />
+            <button id="sendMsgBtn" class="btn btn-dark">SEND</button>
+          </div>
+
+          <div class="action-row" style="margin-top: 10px;">
+            <button class="btn" data-prompt="Black hole ekak kiyanne mokakda saralawa sinhala walin kiyanna">🕳️ Black Hole (Sinhala)</button>
+            <button class="btn" data-prompt="I promise I will finish my study revision tonight before 9 PM!">🤝 Save Promise</button>
+            <button class="btn" data-prompt="Open Instagram">📱 Open Instagram</button>
+            <button class="btn" data-prompt="YouTube eke Sinhala Lo-Fi music search karanna">▶️ YouTube Search</button>
+            <button class="btn" data-prompt="Timer ekak thiyanna 25 minutes">⏱️ Set 25m Timer</button>
+            <button class="btn" data-prompt="Negombo weather today kohomada? Latest weather data check karala Sinhala walin kiyanna">🌦️ Negombo Weather</button>
+            <button class="btn" data-prompt="Sri Lanka latest news headlines tikak source links ekka Sinhala walin kiyanna">📰 LK News</button>
+            <button class="btn" data-prompt="Generate image: ultra cute silver-haired anime cyber girl in white studio">🎨 AI Art</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: 5-SPECIES 3D PET + SCHOOL ALARM + PRO GAMING -->
+      <section id="view-pet" class="view-panel">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">🐾 5 REAL 3D PET COMPANIONS</span>
+            <span class="chip red-accent">AUTO-SCALED 3D RIG</span>
+          </div>
+
+          <div class="grid-5">
+            <div class="selector-tile" data-pet3d="pet_droid"><span>🤖</span><span>Droid</span></div>
+            <div class="selector-tile" data-pet3d="pet_fox"><span>🦊</span><span>Fox</span></div>
+            <div class="selector-tile" data-pet3d="pet_phoenix"><span>🦜</span><span>Phoenix</span></div>
+            <div class="selector-tile" data-pet3d="pet_neko"><span>🐱</span><span>Neko</span></div>
+            <div class="selector-tile" data-pet3d="pet_dragon"><span>🐉</span><span>Dragon</span></div>
+          </div>
+
+          <div class="action-row" style="margin-top: 10px;">
+            <button class="btn btn-dark" data-petact="jump">🚀 3D Jump</button>
+            <button class="btn" data-petact="spin">🌀 Backflip</button>
+            <button class="btn" data-petact="dance">🎵 Dance</button>
+            <button class="btn btn-red" data-petact="orbit">🛸 360° Orbit Mode</button>
+          </div>
+
+          <div style="margin-top: 12px; display: flex; gap: 8px;">
+            <input id="petNameInput" type="text" placeholder="Custom 3D Pet Name..." />
+            <button id="savePetNameBtn" class="btn btn-dark">RENAME</button>
+          </div>
+
+          <div class="setting-row" style="margin-top: 10px;">
+            <div>
+              <div class="setting-label">Delegate AI Lead to 3D Pet</div>
+              <div class="setting-desc">When Mikumi rests, your 3D Pet can answer your questions</div>
+            </div>
+            <label class="toggle">
+              <input id="delegatePetToggle" type="checkbox" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">⏰ SRI LANKA SCHOOL ALARM</span>
+            <span class="chip red-accent">ASIA/COLOMBO</span>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input id="alarmTimeInput" type="time" value="05:30" style="max-width: 150px; font-weight: 700;" />
+            <button id="saveAlarmBtn" class="btn btn-dark">SAVE</button>
+            <button id="testWakeupBtn" class="btn btn-red">🔔 TEST HUMAN VOICE</button>
+          </div>
+          <div id="schoolDaysRow" class="day-pills"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">🎮 PRO GAME COACH &amp; 120HZ BOOST</span>
+            <span class="chip">ZERO BAN</span>
+          </div>
+          <select id="gameSelect">
+            <option value="Free Fire / PUBG">Free Fire / PUBG Mobile</option>
+            <option value="Call of Duty Mobile">Call of Duty Mobile</option>
+            <option value="Genshin Impact">Genshin Impact</option>
+            <option value="Mobile Legends / MOBA">Mobile Legends / MOBA</option>
+          </select>
+          <div id="gameTipOutput" style="margin-top: 10px; padding: 10px 12px; background: var(--bg-soft); border-radius: 12px; font-size: 12.5px;"></div>
+          <div class="action-row">
+            <button id="nextTipBtn" class="btn btn-dark">🎯 Voice Tactical Tip</button>
+            <button id="boostPhoneBtn" class="btn btn-red">⚡ Safe RAM &amp; Lag Boost</button>
+          </div>
+          <div id="boostResultText" style="margin-top:8px; font-family:ui-monospace,monospace; font-size:11px; color:var(--nothing-red);"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title ndot">📝 STUDY &amp; DAILY PLANNER</span></div>
+          <div style="display: flex; gap: 7px; margin-bottom: 8px;">
+            <input id="newTaskInput" type="text" placeholder="Add study subject or task..." />
+            <button id="addTaskBtn" class="btn btn-dark">ADD</button>
+          </div>
+          <div id="todoList"></div>
+        </div>
+      </section>
+
+      <!-- TAB 7: VOICE, PERMISSIONS, MIRU 4-PILLAR MEMORY & SOUL BACKUP -->
+      <section id="view-settings" class="view-panel">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">🎤 REAL HUMAN VOICE &amp; PERMISSIONS</span>
+            <span class="chip">ANDROID 15 READY</span>
+          </div>
+
+          <div style="margin-bottom: 10px;">
+            <div class="setting-label" style="margin-bottom: 5px;">Real Human Girl Voice Character</div>
+            <select id="voicePersonaSelect">
+              <option value="si-LK-ThiliniNeural">🇱🇰 Thilini — Real Sri Lankan Sweet Girl Voice (Sinhala + English)</option>
+              <option value="en-US-AnaNeural">🌸 Ana — Cute Young Human Girl Voice (English)</option>
+              <option value="en-US-AvaMultilingualNeural">🤍 Ava — Warm Natural Human Sister Voice</option>
+              <option value="ja-JP-NanamiNeural">🎌 Nanami — Anime Cute Girl Voice</option>
+            </select>
+          </div>
+
+          <div style="margin: 9px 0 12px; padding:10px; border:1px solid var(--border-subtle); border-radius:14px; background:#fff8fb;">
+            <div class="setting-label">💗 Sinhala Voice Emotion Intensity <span id="voiceEmotionValue">62%</span></div>
+            <input id="voiceEmotionStrength" type="range" min="0" max="100" value="62" style="width:100%; accent-color:#d71921;" />
+            <div class="setting-desc">Emotion tags shape gentle pitch and pacing for Thilini's Sinhala neural voice. Voice OFF still stays silent.</div>
+          </div>
+
+          <div style="margin-bottom: 8px;">
+            <div class="setting-label" style="margin-bottom: 4px;">3D Frame Rate</div>
+            <select id="fpsSelect">
+              <option value="60">60 FPS Ultra Smooth</option>
+              <option value="30">30 FPS Battery Saver</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Voice Output Mode (ON = Speak / OFF = Text Msg)</div>
+              <div class="setting-desc">When OFF, Mikumi stays 100% silent &amp; sends floating text messages instead</div>
+            </div>
+            <label class="toggle"><input id="togVoice" type="checkbox" checked /><span class="slider"></span></label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Allow Phone Command Execution</div>
+              <div class="setting-desc">Open Apps, YouTube Search, Set Alarms/Timers &amp; Quick System Panels</div>
+            </div>
+            <label class="toggle"><input id="togPhoneControl" type="checkbox" checked /><span class="slider"></span></label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Ask Approval Before Phone Commands (Soul-of-Waifu)</div>
+              <div class="setting-desc">Show Approve / Cancel banner before executing phone actions</div>
+            </div>
+            <label class="toggle"><input id="togActionApproval" type="checkbox" checked /><span class="slider"></span></label>
+          </div>
+
+          <div class="setting-row" style="display:none;">
+            <div>
+              <div class="setting-label">Live Screen Reader (disabled)</div>
+              <div class="setting-desc">Removed by user request; screen and Reels monitoring stays off.</div>
+            </div>
+            <label class="toggle"><input id="togLiveScreenWatch" type="checkbox" /><span class="slider"></span></label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Floating Screen-Edge Voice &amp; Chat Box</div>
+              <div class="setting-desc">Tap ✕ anytime on the edge dock to collapse it cleanly off screen</div>
+            </div>
+            <label class="toggle"><input id="togEdgeBox" type="checkbox" checked /><span class="slider"></span></label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">3D Companion Pet Active</div>
+              <div class="setting-desc">Render skeletal 3D Pet alongside Mikumi</div>
+            </div>
+            <label class="toggle"><input id="togPet" type="checkbox" checked /><span class="slider"></span></label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Chat Message Assistant &amp; Memory Vault</div>
+              <div class="setting-desc">Send messages safely &amp; remember preferences, facts, and promises</div>
+            </div>
+            <label class="toggle"><input id="togChatCmd" type="checkbox" checked /><span class="slider"></span></label>
+          </div>
+          <input id="togMusicLearn" type="checkbox" checked style="display:none;" />
+          <input id="togMemory" type="checkbox" checked style="display:none;" />
+          <input id="togGameAdvisor" type="checkbox" checked style="display:none;" />
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">🧠 FRONTIER AI KNOWLEDGE ENGINE</span>
+          </div>
+          <select id="aiProviderSelect" style="margin-bottom: 8px;">
+            <option value="frontier_auto">⚡ Auto Frontier Council (Pre-Warmed Gemini Flash • Free)</option>
+            <option value="groq">🚀 Groq LPU Ultra-Speed (0.2s Llama-3.3-70B — Optional Key)</option>
+            <option value="gemini">💎 Google Gemini 2.5 Flash Official API Key</option>
+            <option value="openrouter">🧠 DeepSeek V3 / R1 via OpenRouter API Key</option>
+            <option value="openai">✨ OpenAI GPT-4.1 (API key required)</option>
+          </select>
+          <input id="apiKeyInput" type="password" placeholder="Optional API Key (OpenAI / Groq / Gemini / OpenRouter)" />
+          <div class="setting-desc" style="margin:5px 0 8px;">API key is stored locally on this device for direct provider calls. Never share the key or add it to a public build/source archive.</div>
+          <div class="action-row">
+            <button id="saveApiBtn" class="btn btn-dark">SAVE AI ENGINE</button>
+          </div>
+        </div>
+
+        <!-- MIRU 4-PILLAR MEMORY INSPECTOR + JSON SOUL BACKUP / RESTORE -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title ndot">💾 MIRU 4-PILLAR MEMORY &amp; SOUL BACKUP</span>
+            <button id="clearMemoryBtn" class="btn" style="padding:4px 9px; font-size:10.5px;">RESET</button>
+          </div>
+          <div class="sub-pill-tabs" style="margin-bottom: 8px;">
+            <button class="sub-pill-btn mem-filter-btn active" data-memcat="all">All</button>
+            <button class="sub-pill-btn mem-filter-btn" data-memcat="fact">📌 Facts</button>
+            <button class="sub-pill-btn mem-filter-btn" data-memcat="episode">✨ Episodes</button>
+            <button class="sub-pill-btn mem-filter-btn" data-memcat="promise">🤝 Promises</button>
+            <button class="sub-pill-btn mem-filter-btn" data-memcat="preference">💖 Likes</button>
+          </div>
+          <div id="memoryListBox"></div>
+          <div class="action-row" style="margin-top:10px; padding-top:9px; border-top:1px solid var(--border-subtle);">
+            <button id="exportSoulBtn" class="btn btn-dark">⬇ Export Soul Backup (.JSON)</button>
+            <label for="importSoulInput" class="btn" style="cursor:pointer; margin:0;">⬆ Restore Soul (.JSON)</label>
+            <input id="importSoulInput" type="file" accept=".json,application/json" style="display:none;" />
+          </div>
+        </div>
+
+        <div class="card" style="background: #ffffff; border: 1.5px solid var(--ink-primary);">
+          <div class="card-header">
+            <span class="card-title ndot">📦 INSTALL ON NOTHING PHONE (3A)</span>
+            <span class="chip red-accent">v5.0 ANDROID 15 APK</span>
+          </div>
+          <p style="font-size: 12px; color: var(--ink-secondary); line-height: 1.5; margin-bottom: 10px;">
+            Android 14 &amp; Android 15 (API 34 ARM64) compliant signed APK (`ai.mikumi.omega` v5.0) with 5 Studio Waifu Models, 11 Motion-Capture Clips, 8-Stage Dating Bond, Photo Booth, Diary, D20 Quest &amp; Human Voice!
+          </p>
+          <div class="action-row">
+            <a href="/Mikumi-3D-Omega-v5.0.apk" download class="btn btn-red" style="text-decoration:none;">⬇ Download Mikumi v5.0 APK</a>
+            <a href="/Mikumi-3D-Termux-Full-Source.zip" download class="btn btn-dark" style="text-decoration:none;">⬇ Full Termux Source (.ZIP)</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- HIDEABLE / STEALTH FLOATING EDGE MINI VOICE + CHAT DOCK -->
+    <div id="edgeMiniDock" class="edge-mini-dock">
+      <button id="edgeStealthTab" class="edge-stealth-tab" title="Show Mikumi Voice & Chat Controls">‹</button>
+      <div id="edgeDrawer" class="edge-drawer">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="ndot" style="font-size:10px;">MIKUMI EDGE QUICK BOX</span>
+          <span style="font-size:10px; color:var(--nothing-red);">● LIVE</span>
+        </div>
+        <div id="edgeReplyText" style="font-size:11.5px; color:var(--ink-secondary); line-height:1.4;">
+          Tap ✕ on the bar to hide controls cleanly off screen! ♡
+        </div>
+        <div style="display:flex; gap:5px;">
+          <input id="edgeInput" type="text" placeholder="Quick command..." style="padding:7px 9px; font-size:12px;" />
+          <button id="edgeSendBtn" class="btn btn-dark" style="padding:7px 10px;">→</button>
+        </div>
+      </div>
+      <div class="edge-pill-trigger">
+        <button class="edge-icon-btn mic-trigger" title="Quick Voice Command">🎤</button>
+        <button id="edgeToggleChat" class="edge-icon-btn" title="Quick Chat Box">💬</button>
+        <button id="edgeMoraBtn" class="edge-icon-btn" title="Duo Cyber Dance">💃</button>
+        <button id="edgeGameTipBtn" class="edge-icon-btn" title="Instant Game Tip">🎮</button>
+        <button id="edgeHideBtn" class="edge-icon-btn" style="color:var(--nothing-red); font-weight:800;" title="Hide Controls Off Screen">✕</button>
+      </div>
+    </div>
+
+    <!-- 7-TAB NOTHING OS OMEGA v5.0 BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-target="view-stage"><span class="nav-icon">◈</span><span>3D WAIFU</span></button>
+      <button class="nav-item" data-target="view-studio"><span class="nav-icon">📸</span><span>STUDIO</span></button>
+      <button class="nav-item" data-target="view-chat"><span class="nav-icon">💬</span><span>MIKUMI AI</span></button>
+      <button class="nav-item" data-target="view-pet"><span class="nav-icon">🐾</span><span>PET/LIFE</span></button>
+      <button class="nav-item" data-target="view-settings"><span class="nav-icon">⚙</span><span>SETTINGS</span></button>
+    </nav>
+  </div>
+
+  <script src="./engine3d.bundle.js"></script>
+  <script src="./stage3d.js"></script>
+  <script src="./brain.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
