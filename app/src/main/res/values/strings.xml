@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mikumi AI</string>
+    <string name="accessibility_desc">Allows Mikumi AI (ONLY when explicitly requested by you) to understand foreign text on screen or pre-fill a chat message command safely. Never stores or leaks screen data.</string>
+</resources>
